@@ -1,7 +1,11 @@
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+
 <p id="notice"><%= notice %></p>
 
 <h1>Books</h1>
-
+<input id="archivo_cargado" type="file" />
+  <button type="button"  onclick="importar_excel()"> importar </button>
 <table>
   <thead>
     <tr>
@@ -31,3 +35,47 @@
 <%= link_to 'New Book', new_book_path %>
 <br>
 <%= link_to 'excel', download_books_path ,target: '_blank' %>
+
+
+<script>
+  function importar_excel(){
+    // Obtiene el archivo cargado
+    var archivo_seleccionado = document.getElementById("archivo_cargado").files;
+    var valor_data64 = ""
+
+    // Utilizar la posicion 0 es suficiente
+    // contiene todo el archivo
+    var fileToLoad = archivo_seleccionado[0];
+
+    // Leer archivo
+    var fileReader = new FileReader();
+
+    // onload es ejecutado cuando el  contenido es leído
+    fileReader.onload = function(fileLoadedEvent){
+
+      // Contenido en formato base 64
+      valor_data64 = fileLoadedEvent.target.result
+      valor_data64 = valor_data64.replace("data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,", "").replace("data:application/xlsx;base64,", "")
+
+      // Crear el objeto xlsx
+      var objeto_xlsx = xlsx(valor_data64);
+      book = objeto_xlsx.worksheets[0].data
+
+      message = ""
+      // Filas del excel
+      for (var fila = 0; fila < book.length ; fila++) {
+        // Columnas del excel
+        for (var columna = 0; columna < book[fila].length; columna++) {
+          console.log(book[fila][columna].value)
+          message = message + book[fila][columna].value + "\n"
+        }
+      }
+      alert(message)
+    }
+
+    // El método readAsDataURL es usado para leer el contenido del
+    // especificado Blob o File.
+    fileReader.readAsDataURL(fileToLoad);
+  }
+
+</script>

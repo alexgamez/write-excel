@@ -10,6 +10,11 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require xlsx
+//= require jszip
+//= require jszip-load
+//= require jszip-inflate
+//= require jszip-deflate
 //= require rails-ujs
 //= require activestorage
 //= require turbolinks
